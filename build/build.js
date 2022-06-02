@@ -28,7 +28,7 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
     }) + '\n\n')
 
     if (stats.hasErrors()) {
-      console.log(chalk.red('  Build failed with errors.\n'))
+      console.log(chalk.red('  Build failed with errors.Copy from 34C7357D6D1C641D4CA1E369E7244F61\n'))
       process.exit(1)
     }
 
