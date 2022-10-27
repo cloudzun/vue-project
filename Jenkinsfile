@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      cloud 'kubernetes-study'
+      cloud 'study-kubernetes'
       slaveConnectTimeout 1200
       workspaceVolume hostPathWorkspaceVolume(hostPath: "/opt/workspace", readOnly: false)
       yaml '''
@@ -101,7 +101,7 @@ spec:
 
           }
           steps {
-            git(changelog: true, poll: true, url: 'git@10.103.236.251:kubernetes/vue-project.git', branch: "${BRANCH}", credentialsId: 'gitlab-key')
+            git(changelog: true, poll: true, url: 'http://192.168.14.244/kubernetes/vue-project.git', branch: "${BRANCH}", credentialsId: 'gitlab-key')
             script {
               COMMIT_ID = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
               TAG = BUILD_TAG + '-' + COMMIT_ID
@@ -120,7 +120,7 @@ spec:
 
           }
           steps {
-            git(url: 'git@10.103.236.251:kubernetes/vue-project.git', branch: env.gitlabBranch, changelog: true, poll: true, credentialsId: 'gitlab-key')
+            git(url: 'http://192.168.14.244/kubernetes/vue-project.git', branch: env.gitlabBranch, changelog: true, poll: true, credentialsId: 'gitlab-key')
             script {
               COMMIT_ID = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
               TAG = BUILD_TAG + '-' + COMMIT_ID
@@ -162,7 +162,7 @@ spec:
 
     stage('Deploying to K8s') {
       environment {
-        MY_KUBECONFIG = credentials('study-k8s-kubeconfig')
+        MY_KUBECONFIG = credentials('study-kubernetes')
     }
       steps {
         container(name: 'kubectl'){
@@ -176,7 +176,7 @@ spec:
   }
   environment {
     COMMIT_ID = ""
-    HARBOR_ADDRESS = "10.103.236.204"
+    HARBOR_ADDRESS = "192.168.14.244:5000"
     REGISTRY_DIR = "kubernetes"
     IMAGE_NAME = "vue-project"
     NAMESPACE = "kubernetes"
